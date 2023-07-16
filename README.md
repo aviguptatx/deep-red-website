@@ -1,6 +1,8 @@
 # Deep Red Web App
 Web app for running Secret Hitler role predictions using the [Deep Red](https://github.com/aviguptatx/deep-red) machine learning model.
 
+Accessible at https://deepredai.pythonanywhere.com/
+
 ## Running Locally
 To run this app locally:
 
