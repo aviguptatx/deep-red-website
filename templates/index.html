@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secret Hitler Role Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container main-container">
+            <h1 class="title">Secret Hitler Role Predictor</h1>
+            <div class="link-container">
+                <div>
+                    <a href="/about">About</a>
+                  </div>
+                  <div>
+                    <span>|</span>  
+                  </div>
+                  <div>
+                    <a href="/instructions">Instructions</a>
+                  </div>
+            </div>
+            <div class="input-container">
+                <div class="line-numbers" id="line-numbers"></div>
+                <textarea id="text" placeholder="Enter your input here"></textarea>
+                <div class="button-container">
+                    <button id="insertTemplate" onclick="insertTemplate()">Insert Template</button>
+                    <button id="predictButton" onclick="predict()">Predict</button>
+                </div>
+            </div>
+        </div>
+        <div class="container result-container"></div>
+        <div class="clearfix"></div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

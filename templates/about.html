@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">About</h1>
+        <div class="about">
+            <pre>
+<h2>Usage</h2>
+Paste a game log of a <a href="https://www.secrethitler.com/">Secret Hitler</a> game into the input box, and click predict!  Make sure your input follows the <a href="/instructions">correct formatting</a>.
+The fun comes in when you input partial games -- the model can run on these as well and give you live predictions as to who is who in your game!
+                    
+The outputs are probabilities of each player being a Fascist, where 0.00 represents a certain Liberal and 1.00 represents a certain Fascist.         
+<h2>Model</h2>
+For more information on the machine learning model and how it works, check out the <a href="https://github.com/aviguptatx/deep-red">Deep Red Project</a>.
+                
+The source code for this website is available <a href="https://github.com/aviguptatx/deep-red-website">here</a>. Feature requests and bug reports are welcome!                 
+            </pre>
+        </div>
+    </div>
+</body>
+</html>
