@@ -1,16 +1,16 @@
 function updateLineNumbers() {
     const textArea = document.getElementById('text');
     const lineNumbers = document.getElementById('line-numbers');
-    
+
     const linesCount = textArea.value.split('\n').length;
     lineNumbers.innerHTML = Array.from(Array(linesCount), (_, i) => `<span>${i + 1}</span>`).join('');
-    
+
     lineNumbers.style.transform = `translateY(-${textArea.scrollTop}px)`;
-    
+
     const textAreaRect = textArea.getBoundingClientRect();
     const firstVisibleLineNumber = Math.ceil(textArea.scrollTop / 20) + 1;
     const lastVisibleLineNumber = firstVisibleLineNumber + Math.ceil(textAreaRect.height / 20) - 1;
-    
+
     const lineNumberSpans = lineNumbers.querySelectorAll('span');
     lineNumberSpans.forEach((span, index) => {
         if (index + 1 < firstVisibleLineNumber || index + 1 > lastVisibleLineNumber) {
@@ -71,16 +71,29 @@ function validateInput(text) {
 
 function predict() {
     const text = document.getElementById('text').value;
-    const resultDiv = document.querySelector('.result-container');
-    resultDiv.innerHTML = '';
+    let resultDiv = document.querySelector('.result-container');
     const errorDiv = document.createElement('div');
 
     const validationError = validateInput(text);
     if (validationError) {
         errorDiv.classList.add('error');
         errorDiv.innerText = validationError;
+        if (!resultDiv) {
+            resultDiv = document.createElement('div');
+            resultDiv.classList.add('container', 'result-container');
+        } else {
+            resultDiv.innerHTML = '';
+        }
         resultDiv.appendChild(errorDiv);
         return;
+    }
+
+    let resultContainer = resultDiv;
+    if (!resultContainer) {
+        resultContainer = document.createElement('div');
+        resultContainer.classList.add('container', 'result-container');
+    } else {
+        resultContainer.innerHTML = '';
     }
 
     fetch('/predict', {
@@ -98,37 +111,48 @@ function predict() {
 
         const prediction = data.prediction;
 
-        const barsContainer = document.createElement('div');
-        barsContainer.classList.add('bars-container');
-
         if (prediction.length === 0) {
-            const errorDiv = document.createElement('div');
             errorDiv.classList.add('error');
             errorDiv.innerHTML = '<p>Invalid input. Please check the format and try again.</p>';
-            resultDiv.appendChild(errorDiv);
+            resultContainer.appendChild(errorDiv);
         } else {
+            const barsContainer = document.createElement('div');
+            barsContainer.classList.add('bars-container');
+
             for (let i = 0; i < prediction.length; i++) {
                 const person = document.createElement('div');
                 person.classList.add('person');
                 const color = interpolateColor(prediction[i]);
                 person.style.backgroundColor = color;
-    
+
                 const label = document.createElement('div');
                 label.classList.add('label');
                 label.innerText = `Seat ${i + 1}: ${prediction[i].toFixed(2)}`;
                 label.style.color = isDarkColor(color) ? 'white' : 'black';
-    
+
                 person.appendChild(label);
                 barsContainer.appendChild(person);
             }
+
+            resultContainer.appendChild(barsContainer);
         }
-        resultDiv.appendChild(barsContainer);
+
+        if (!resultDiv) {
+            const wrapperDiv = document.querySelector('.wrapper');
+            wrapperDiv.appendChild(resultContainer);
+        }
     })
     .catch(error => {
         errorDiv.classList.add('error');
         errorDiv.innerText = "Server Error. Perhaps your game is too long?";
-        resultDiv.appendChild(errorDiv);
+        resultContainer.appendChild(errorDiv);
+
+        if (!resultDiv) {
+            const wrapperDiv = document.querySelector('.wrapper');
+            wrapperDiv.appendChild(resultContainer);
+        }
     });
+
     updateLineNumbers();
 }
 
@@ -152,8 +176,8 @@ function isDarkColor(color) {
     const rgb = color.match(/\d+/g);
     const brightness = Math.round(
         (parseInt(rgb[0]) * 299 +
-        parseInt(rgb[1]) * 587 +
-        parseInt(rgb[2]) * 114) / 1000
+            parseInt(rgb[1]) * 587 +
+            parseInt(rgb[2]) * 114) / 1000
     );
     return brightness <= 125;
 }
